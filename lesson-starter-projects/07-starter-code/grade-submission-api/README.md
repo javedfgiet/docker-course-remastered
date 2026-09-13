@@ -1,72 +1,70 @@
-# Grade Submission API
-This is a Node.js API for managing grade submissions.
+﻿<h1>Building and Running Node.js Grade Submission API in Docker</h1>
 
-## Usage
-To run the Grade Submission API container, use the following Docker command:
+<p>This example shows how to build a Docker image for a Node.js application (<code>grade-submission-api</code>) and run it inside a container using the <b>Node.js</b> image.</p>
 
-```bash
-docker run --name node-server --network my-network -p 3000:3000 rslim087/grade-submission-api:1.0.0
-```
+<h2>🚀 Build Command</h2>
+<pre><code>docker build -t javedfgiet/grade-submision-api .
+</code></pre>
 
-For version 2.0.0 with MongoDB integration, use the following commands:
+<h2>📊 Build Output</h2>
+<pre><code>[+] Building 0.7s (11/11) FINISHED
+ => [internal] load build definition from Dockerfile
+ => [internal] load metadata for docker.io/library/node:14
+ => [internal] load .dockerignore
+ => [1/6] FROM docker.io/library/node:14
+ => [2/6] WORKDIR /app
+ => [3/6] COPY package.json .
+ => [4/6] COPY package-lock.json .
+ => [5/6] RUN npm install
+ => [6/6] COPY . .
+ => exporting to image
+ => naming to docker.io/javedfgiet/grade-submision-api:latest
+ => unpacking to docker.io/javedfgiet/grade-submision-api:latest
+</code></pre>
 
-```bash
-docker run --name mongodb -d -p 27017:27017 mongo
-docker run --name node-server --network my-network -p 3000:3000 -e DB_HOST=mongodb -e DB_PORT=27017 -e DB_NAME=gradesDB rslim087/grade-submission-api:2.0.0
-```
+<h2>🚀 Run Command</h2>
+<pre><code>docker run --name node-server --rm -p 3001:3000 javedfgiet/grade-submision-api
+</code></pre>
 
-These commands do the following:
-- Runs a container named `node-server`.
-- Connects the container to the Docker network named `my-network`.
-- Maps port 3000 of the container to port 3000 of the host machine.
-- For 2.0.0, runs a MongoDB container named `mongodb` and sets environment variables for database connectivity.
-- Uses the `rslim087/grade-submission-api:1.0.0` or `rslim087/grade-submission-api:2.0.0` image, depending on the version.
+<h2>📊 Example Output</h2>
+<pre><code>Grade service is running on port 3000
+Received GET request for grades
+</code></pre>
 
-Make sure you have created the Docker network `my-network` before running the containers. For 2.0.0, ensure that the MongoDB container is running before starting the Grade Submission API container.
+<h2>🌐 Access in Browser</h2>
+<p>Since port <code>3000</code> inside the container is mapped to port <code>3001</code> on your host machine, open:</p>
+<pre><code>http://localhost:3001/
+</code></pre>
 
-## API Endpoints
-- `GET /grades`: Retrieves all grade submissions.
-- `POST /grades`: Creates a new grade submission.
+<h2>⚠️ Key Points</h2>
+<ol>
+  <li><b>Dockerfile</b>
+    <ul>
+      <li>Defines the base image (<code>node:14</code>).</li>
+      <li>Sets the working directory to <code>/app</code>.</li>
+      <li>Copies <code>package.json</code> and <code>package-lock.json</code> for dependency installation.</li>
+      <li>Runs <code>npm install</code> to install dependencies.</li>
+      <li>Copies the rest of the project files into the container.</li>
+    </ul>
+  </li>
+  <li><b>Build</b>
+    <ul>
+      <li><code>docker build -t javedfgiet/grade-submision-api .</code> creates the image tagged <code>javedfgiet/grade-submision-api</code>.</li>
+    </ul>
+  </li>
+  <li><b>Run</b>
+    <ul>
+      <li><code>docker run --name node-server --rm -p 3001:3000 javedfgiet/grade-submision-api</code> starts the container and maps ports.</li>
+      <li><code>--rm</code> ensures the container is removed after execution.</li>
+      <li><code>--name</code> assigns a custom name to the container.</li>
+    </ul>
+  </li>
+  <li><b>Browser Access</b>
+    <ul>
+      <li>Visit <code>http://localhost:3001/</code> to interact with the Grade Submission API.</li>
+    </ul>
+  </li>
+</ol>
 
-## Database Integration (2.0.0 only)
-The Grade Submission API 2.0.0 integrates with a MongoDB database for persistent storage of grade submissions. The following environment variables are required for the database connection:
-- `DB_HOST`: The hostname or IP address of the MongoDB container.
-- `DB_PORT`: The port number of the MongoDB container.
-- `DB_NAME`: The name of the database to store grade submissions.
-
-Make sure to provide the appropriate values for these environment variables when running the 2.0.0 container.
-
-## Docker Image
-The Docker image is built using the following Dockerfile:
-
-```dockerfile
-FROM node:14
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-EXPOSE 3000
-CMD ["node", "app.js"]
-```
-
-The image is based on the Node.js 14 base image and runs the `app.js` file when the container starts.
-
-## Version Differences
-**Version 1.0.0:**
-- Stateless API without a backend database.
-- Grade submissions are stored in memory and not persisted.
-- Suitable for testing and development purposes.
-
-**Version 2.0.0:**
-- Stateful API with MongoDB integration for data persistence.
-- Grade submissions are stored in a MongoDB database.
-- Requires a running MongoDB container and additional environment variables for database connectivity.
-- Provides permanent storage for grade submissions.
-- Suitable for production environments.
-
-## Requirements
-- Docker
-- For 2.0.0, a MongoDB instance running and accessible
-
-## License
-This project is licensed under the MIT License.
+<h2>✅ Summary</h2>
+<p>By defining a Dockerfile, building the image, and running the container with port mapping, you can package and execute your Node.js Grade Submission API seamlessly inside Docker and access it via your browser or API client.</p>
